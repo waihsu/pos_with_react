@@ -1,4 +1,5 @@
-import * as React from "react";
+"use client";
+import "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -15,15 +16,12 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import {
   Divider,
   Drawer,
-  FormControlLabel,
-  FormGroup,
   List,
   ListItem,
   ListItemButton,
-  ListItemIcon,
   ListItemText,
-  Switch,
 } from "@mui/material";
+import { useState } from "react";
 
 const drawerWidth = 240;
 const navItems = [
@@ -69,8 +67,8 @@ interface Props {
 
 const Navbar = (props: Props) => {
   const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [auth, setAuth] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [auth, setAuth] = useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);

@@ -11,9 +11,10 @@ app.use(express.json());
 app.post("/auth/register", async (req, res) => {
   console.log(req.body);
   const body = req.body;
-  res.status(200).json({ register: body });
+  res.status(200).json({ registered: body });
 });
 
 app.listen(port, () => {
   console.log("Server Started On Port 5000");
 });
+
