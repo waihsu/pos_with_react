@@ -1,113 +1,95 @@
-import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import HomeIcon from "@mui/icons-material/Home";
-import InfoIcon from "@mui/icons-material/Info";
-import PermContactCalendarIcon from "@mui/icons-material/PermContactCalendar";
-import LoginIcon from "@mui/icons-material/Login";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
 import {
   Divider,
   Drawer,
-  FormControlLabel,
-  FormGroup,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Switch,
 } from "@mui/material";
+import LunchDiningIcon from "@mui/icons-material/LunchDining";
+import LocalDiningIcon from "@mui/icons-material/LocalDining";
+import SettingsIcon from "@mui/icons-material/Settings";
+import LocalMallIcon from "@mui/icons-material/LocalMall";
+import ClassIcon from "@mui/icons-material/Class";
+import CategoryIcon from "@mui/icons-material/Category";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import { useState } from "react";
 
-const drawerWidth = 240;
-const navItems = [
-  {
-    id: 1,
-    name: "Home",
-    link: "/",
-    icon: <HomeIcon />,
-  },
-  {
-    id: 2,
-    name: "About",
-    link: "/about",
-    icon: <InfoIcon />,
-  },
+const sidebarMenuItems = [
+  { id: 1, label: "Orders", icon: <LocalMallIcon />, route: "/orders" },
+  { id: 2, label: "Menus", icon: <LocalDiningIcon />, route: "/menus" },
   {
     id: 3,
-    name: "Contact",
-    link: "/contact",
-    icon: <PermContactCalendarIcon />,
+    label: "Menu Categories",
+    icon: <CategoryIcon />,
+    route: "/menu-categories",
   },
-  {
-    id: 4,
-    name: "Sign Up",
-    link: "/signup",
-    icon: <ExitToAppIcon />,
-  },
+  { id: 4, label: "Addons", icon: <LunchDiningIcon />, route: "/addons" },
   {
     id: 5,
-    name: "Log in",
-    link: "/login",
-    icon: <LoginIcon />,
+    label: "Addon Categories",
+    icon: <ClassIcon />,
+    route: "/addon-categories",
   },
+  {
+    id: 6,
+    label: "Locations",
+    icon: <LocationOnIcon />,
+    route: "/locations",
+  },
+  { id: 7, label: "Settings", icon: <SettingsIcon />, route: "/settings" },
 ];
 
-interface Props {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window?: () => Window;
-}
+const Navbar = () => {
+  const [open, setOpen] = useState(false);
+  const [auth, setAuth] = useState(true);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-const Navbar = (props: Props) => {
-  const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [auth, setAuth] = React.useState(false);
-
-  const handleDrawerToggle = () => {
-    setMobileOpen((prevState) => !prevState);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAuth(event.target.checked);
   };
 
-  const handleChange = () => {
-    setAuth((prevState) => !prevState);
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
   };
 
-  const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        SHARK
-      </Typography>
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const renderDrawer = () => (
+    <Box
+      sx={{ width: 250 }}
+      role="presentation"
+      onClick={() => setOpen(false)}
+      onKeyDown={() => setOpen(false)}>
+      <List>
+        {sidebarMenuItems.slice(0, 6).map((menuItem) => (
+          <ListItem key={menuItem.id} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>{menuItem.icon}</ListItemIcon>
+              <ListItemText primary={menuItem.label} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
       <Divider />
       <List>
-        {navItems.map((item) => (
-          <ListItem key={item.id} disablePadding>
-            <ListItemButton
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                textAlign: "center",
-                listStyle: "none",
-              }}
-              href={item.link}>
-              {/* <ListItemIcon
-                sx={{ bgcolor: "red", display: "inline" }}
-                children={item.icon}
-              /> */}
-              {item.icon}
-              <ListItemText
-                sx={{ maxWidth: "fit-content" }}
-                primary={item.name}
-              />
-              {/* {item.icon}
-              <li>{item.name}</li> */}
+        {sidebarMenuItems.slice(-1).map((menuItem) => (
+          <ListItem key={menuItem.id} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>{menuItem.icon}</ListItemIcon>
+              <ListItemText primary={menuItem.label} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -115,46 +97,57 @@ const Navbar = (props: Props) => {
     </Box>
   );
 
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
           <IconButton
-            color="inherit"
-            aria-label="open drawer"
+            size="large"
             edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}>
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+            onClick={() => setOpen(true)}>
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            SHARK
+            Foodie POS
           </Typography>
-          <Button onClick={handleChange} variant="contained">
-            {auth ? "Login" : "Logout"}
-          </Button>
+          {auth && (
+            <div>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit">
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}>
+                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleClose}>My account</MenuItem>
+              </Menu>
+            </div>
+          )}
         </Toolbar>
       </AppBar>
-      <Box component="nav">
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}>
-          {drawer}
+      <Box>
+        <Drawer open={open} onClose={() => setOpen(false)}>
+          {renderDrawer()}
         </Drawer>
       </Box>
     </Box>
